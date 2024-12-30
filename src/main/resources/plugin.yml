@@ -1,0 +1,14 @@
+name: Chunkter
+version: '1.0'
+main: org.lilbrocodes.chunkter.Chunkter
+api-version: '1.20'
+prefix: Chunkter
+authors: [ LilBroCodes ]
+description: Plugin that allows for automatic starting / stopping of chunky on player join / leave
+commands:
+  chunkter:
+    description: Main command for Chunkter.
+    usage: /chunkter <on, off, config, status, reload>
+    aliases: [ "ct" ]
+    permission: chunkter.main
+    permission-message: You do not have permission to execute this command.

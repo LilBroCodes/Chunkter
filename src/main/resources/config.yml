@@ -1,0 +1,5 @@
+# Maximum amount of players that can be online with chunky running
+max-players: 1
+
+# If enabled, all chunky command except for quiet and progress will be blocked.
+enforce-generation: false
