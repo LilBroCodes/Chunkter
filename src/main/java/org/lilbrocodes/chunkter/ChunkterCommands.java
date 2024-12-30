@@ -8,6 +8,8 @@ import org.lilbrocodes.chunkter.util.CommandParser;
 import org.lilbrocodes.chunkter.util.LoggingSender;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ChunkterCommands implements CommandExecutor, TabCompleter {
@@ -32,7 +34,7 @@ public class ChunkterCommands implements CommandExecutor, TabCompleter {
             plugin.sendMessage(commandSender, "    " + String.format("max-players: %d", plugin.maxPlayers));
         }
 
-        if (args.length >= 1 && CommandParser.equalsAnyLowercase(args[0], List.of("on", "off"))) {
+        if (args.length >= 1 && CommandParser.equalsAnyLowercase(args[0], Arrays.asList("on", "off"))) {
             boolean enabled = args[0].equalsIgnoreCase("on");
             if (plugin.enabled != enabled) {
                 plugin.enabled = enabled;
@@ -81,15 +83,15 @@ public class ChunkterCommands implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         if (args.length == 1) {
-            return List.of("on", "off", "config", "status", "reload");
+            return Arrays.asList("on", "off", "config", "status", "reload");
         } else if (args.length == 2) {
-            return List.of("max-players", "enforce-generation");
+            return Arrays.asList("max-players", "enforce-generation");
         } else if (args.length == 3) {
             if (args[1].equalsIgnoreCase("enforce-generation")) {
-                return List.of("true", "false");
+                return Arrays.asList("true", "false");
             }
         }
 
-        return List.of();
+        return Collections.emptyList();
     }
 }

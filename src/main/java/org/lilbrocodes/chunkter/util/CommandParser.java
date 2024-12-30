@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.lilbrocodes.chunkter.Chunkter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandParser {
@@ -33,10 +34,10 @@ public class CommandParser {
 
     public static boolean cancelCommand(String command) {
         String[] args = command.split(" ");
-        List<String> chunkyCommands = new ArrayList<>(List.of("/chunky", "/cy", "/chunky:chunky", "/chunky:cy"));
+        List<String> chunkyCommands = new ArrayList<>(Arrays.asList("/chunky", "/cy", "/chunky:chunky", "/chunky:cy"));
         if (args.length >= 2) {
             if (equalsAnyLowercase(args[0], chunkyCommands)) {
-                return !equalsAnyLowercase(args[1], List.of("quiet", "progress"));
+                return !equalsAnyLowercase(args[1], Arrays.asList("quiet", "progress"));
             }
         }
 

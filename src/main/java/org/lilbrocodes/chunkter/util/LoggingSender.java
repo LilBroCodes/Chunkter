@@ -44,6 +44,11 @@ public class LoggingSender implements CommandSender {
     }
 
     @Override
+    public Spigot spigot() {
+        return wrappedSender.spigot();
+    }
+
+    @Override
     public boolean isPermissionSet(String name) {
         return wrappedSender.isPermissionSet(name);
     }

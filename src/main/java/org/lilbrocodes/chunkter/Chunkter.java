@@ -29,7 +29,7 @@ public final class Chunkter extends JavaPlugin {
         loadConfig();
 
         Plugin chunky = Bukkit.getPluginManager().getPlugin("Chunky");
-        if (chunky == null || !chunky.isEnabled()) {
+        if (chunky == null) {
             getLogger().warning("Chunky not found, disabling");
             getServer().getPluginManager().disablePlugin(this);
             return;

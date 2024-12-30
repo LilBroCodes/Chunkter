@@ -22,7 +22,7 @@ dependencies {
     compileOnly group: "org.spigotmc", name: "spigot-api", version: project.spigotVersion
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 8
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -56,6 +56,7 @@ jar {
         )
     }
 }
+
 runServer {
     version "1.20.1"
 }
