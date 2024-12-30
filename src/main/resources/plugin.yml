@@ -1,5 +1,5 @@
 name: Chunkter
-version: '1.1'
+version: '1.11'
 main: org.lilbrocodes.chunkter.Chunkter
 api-version: '1.13'
 prefix: Chunkter

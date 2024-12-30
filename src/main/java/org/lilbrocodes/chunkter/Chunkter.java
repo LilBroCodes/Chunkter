@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.lilbrocodes.chunkter.implementation.Metrics;
 import org.lilbrocodes.chunkter.util.CommandParser;
 import org.lilbrocodes.chunkter.util.LoggingSender;
 
@@ -27,6 +28,10 @@ public final class Chunkter extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
+
+        Metrics metrics = new Metrics(this, 24277);
+        metrics.addCustomChart(new Metrics.SimplePie("max-players", () -> String.valueOf(maxPlayers)));
+        metrics.addCustomChart(new Metrics.SimplePie("enforce-generation", () -> enforceGeneration ? "True" : "False"));
 
         Plugin chunky = Bukkit.getPluginManager().getPlugin("Chunky");
         if (chunky == null) {
