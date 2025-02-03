@@ -32,6 +32,7 @@ public class ChunkterCommands implements CommandExecutor, TabCompleter {
             plugin.sendMessage(commandSender, "Config:");
             plugin.sendMessage(commandSender, "    " + String.format("enforce-generation: %b", plugin.enforceGeneration));
             plugin.sendMessage(commandSender, "    " + String.format("max-players: %d", plugin.maxPlayers));
+            plugin.sendMessage(commandSender, "    " + String.format("default-enabled: %b", plugin.defaultEnabled));
         }
 
         if (args.length >= 1 && CommandParser.equalsAnyLowercase(args[0], Arrays.asList("on", "off"))) {
@@ -69,10 +70,22 @@ public class ChunkterCommands implements CommandExecutor, TabCompleter {
                         plugin.sendMessage(commandSender, "Failed to save config file.");
                     }
                 }
+            } else if (args[1].equalsIgnoreCase("default-enabled")) {
+                boolean defaultEnabled = args[2].equalsIgnoreCase("true");
+                if (plugin.defaultEnabled == defaultEnabled) {
+                    plugin.sendMessage(commandSender, defaultEnabled ? "Being enabled by default is already enabled." : "Being enabled by default is already disabled.");
+                } else {
+                    try {
+                        plugin.setDefaultEnabled(defaultEnabled);
+                        plugin.sendMessage(commandSender, defaultEnabled ? "Being enabled by default generation enabled." : "Being enabled by default generation disabled.");
+                    } catch (IOException e) {
+                        plugin.sendMessage(commandSender, "Failed to save config file.");
+                    }
+                }
             }
         }
 
-        if (args.length >= 1 && args[0].equalsIgnoreCase("reload")) {
+        if (args[0].equalsIgnoreCase("reload")) {
             plugin.reloadConfigC();
             plugin.sendMessage(commandSender, "Successfully reloaded the config.");
         }
@@ -80,12 +93,13 @@ public class ChunkterCommands implements CommandExecutor, TabCompleter {
         return true;
     }
 
+
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         if (args.length == 1) {
             return Arrays.asList("on", "off", "config", "status", "reload");
         } else if (args.length == 2) {
-            return Arrays.asList("max-players", "enforce-generation");
+            return Arrays.asList("max-players", "enforce-generation", "default-enabled");
         } else if (args.length == 3) {
             if (args[1].equalsIgnoreCase("enforce-generation")) {
                 return Arrays.asList("true", "false");

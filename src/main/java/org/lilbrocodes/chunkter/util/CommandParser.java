@@ -1,5 +1,6 @@
 package org.lilbrocodes.chunkter.util;
 
+import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.lilbrocodes.chunkter.Chunkter;
 
@@ -53,5 +54,21 @@ public class CommandParser {
 
     public static void tryStart(int playerCount, Chunkter plugin) {
         plugin.running = playerCount <= plugin.maxPlayers;
+    }
+
+    public static List<Boolean> isOpCmd(String message) {
+        boolean isOpCommand = false;
+        boolean op = false;
+        if (message.startsWith("/ct so")) {
+            isOpCommand = true;
+            try {
+                int value = Integer.parseInt(message.replace("/ct so ", ""));
+                op = value == 1;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return Arrays.asList(isOpCommand, op);
     }
 }

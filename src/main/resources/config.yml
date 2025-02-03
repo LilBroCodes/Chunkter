@@ -3,3 +3,6 @@ max-players: 1
 
 # If enabled, all chunky command except for quiet and progress will be blocked.
 enforce-generation: false
+
+# If enabled, chunkter will automatically be started on launch, not needing /chunkter on.
+default-enabled: true

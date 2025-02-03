@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public final class Chunkter extends JavaPlugin {
+    public boolean defaultEnabled = false;
     public boolean enabled = false;
     public boolean running = false;
 
@@ -63,6 +64,8 @@ public final class Chunkter extends JavaPlugin {
 
         enforceGeneration = config.getBoolean("enforce-generation");
         maxPlayers = config.getInt("max-players");
+        enabled = config.getBoolean("default-enabled");
+        defaultEnabled = enabled;
     }
 
     public void reloadConfigC() {
@@ -71,6 +74,7 @@ public final class Chunkter extends JavaPlugin {
 
         enforceGeneration = config.getBoolean("enforce-generation");
         maxPlayers = config.getInt("max-players");
+        defaultEnabled = config.getBoolean("default-enabled");
     }
 
     public void sendMessage(CommandSender sender, String message) {
@@ -95,4 +99,10 @@ public final class Chunkter extends JavaPlugin {
         config.set("enforce-generation", value);
         writeConfig();
     }
+
+    public void setDefaultEnabled(boolean value) throws IOException {
+        config.set("default-enabled", value);
+        writeConfig();
+    }
+
 }

