@@ -2,6 +2,7 @@ package org.lilbrocodes.chunkter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -12,14 +13,30 @@ import org.lilbrocodes.chunkter.util.LoggingSender;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.*;
 
 public final class Chunkter extends JavaPlugin {
     public boolean enabled = false;
     public boolean running = false;
 
+    // ---------------- CONFIG ---------------- //
+
     public boolean enforceGeneration = false;
+    public boolean messageOnComplete = false;
+
     public int maxPlayers = 1;
+    public int webhookId = 0;
+
+    public Integer diameter = null;
+    public Integer radius = null;
+    public Integer centerX = null;
+    public Integer centerY = null;
+
+    public String message = "%world_name% finished generating!";
+    public String world = "world";
+    public String preset = "border";
+
+    // ---------------------------------------- //
 
     private FileConfiguration config;
 
@@ -46,31 +63,66 @@ public final class Chunkter extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new ChunkterEvents(this), this);
 
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            if (enabled) {
-                if (running) {
-                    CommandParser.resumeChunky(commandSender);
-                } else {
-                    CommandParser.pauseChunky(commandSender);
-                }
+        Bukkit.getScheduler().runTaskTimer(this, this::tick, 0L, 1L);
+    }
+
+    public void tick() {
+        if (enabled) {
+            if (running) {
+                CommandParser.resumeChunky(commandSender);
+            } else {
+                CommandParser.pauseChunky(commandSender);
             }
-        }, 0L, 1L);
+        }
+    }
+
+    private void fetchConfig() {
+        config = this.getConfig();
+
+        enforceGeneration = config.getBoolean("enforce-generation");
+        messageOnComplete = config.getBoolean("message-on-complete");
+
+        maxPlayers = config.getInt("max-players");
+        webhookId = config.getInt("webhook-id");
+
+        message = config.getString("message");
+
+        ConfigurationSection section = config.getConfigurationSection("world");
+        if (section == null) return;
+
+        world = section.getString("name");
+        preset = section.getString("preset");
+
+        if (Objects.equals(preset, "manual")) {
+            if (section.contains("diameter")) {
+                diameter = section.getInt("diameter");
+                radius = null;
+            } else if (section.contains("radius")) {
+                radius = section.getInt("radius");
+                diameter = null;
+            } else {
+                radius = null;
+                diameter = null;
+            }
+
+            if (section.contains("center-x") && section.contains("center-y")) {
+                centerX = section.getInt("center-x");
+                centerY = section.getInt("center-y");
+            } else {
+                centerX = null;
+                centerY = null;
+            }
+        }
     }
 
     public void loadConfig() {
         this.saveDefaultConfig();
-        config = this.getConfig();
-
-        enforceGeneration = config.getBoolean("enforce-generation");
-        maxPlayers = config.getInt("max-players");
+        fetchConfig();
     }
 
     public void reloadConfigC() {
         this.reloadConfig();
-        config = this.getConfig();
-
-        enforceGeneration = config.getBoolean("enforce-generation");
-        maxPlayers = config.getInt("max-players");
+        fetchConfig();
     }
 
     public void sendMessage(CommandSender sender, String message) {

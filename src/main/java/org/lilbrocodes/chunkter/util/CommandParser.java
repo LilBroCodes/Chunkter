@@ -6,6 +6,7 @@ import org.lilbrocodes.chunkter.Chunkter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandParser {
     public static Boolean running(LoggingSender sender) {
@@ -53,5 +54,28 @@ public class CommandParser {
 
     public static void tryStart(int playerCount, Chunkter plugin) {
         plugin.running = playerCount <= plugin.maxPlayers;
+    }
+
+    public static void configure(LoggingSender sender, Chunkter ct) {
+        sender.clearCommands();
+
+        if (ct.world != null) {
+            sender.addCommand(String.format("cy world %s", ct.world));
+        }
+
+        if (Objects.equals(ct.preset, "border")) {
+            sender.addCommand("cy worldborder");
+        } else if (Objects.equals(ct.preset, "manual")) {
+            if (ct.centerX != null && ct.centerY != null) {
+                sender.addCommand(String.format("cy center %d %d", ct.centerX, ct.centerY));
+            }
+            if (ct.radius != null) {
+                sender.addCommand(String.format("cy radius %d", ct.radius));
+            } else if (ct.diameter != null) {
+                sender.addCommand(String.format("cy radius %d", ct.diameter / 2));
+            }
+        }
+
+        sender.doCommands(true);
     }
 }

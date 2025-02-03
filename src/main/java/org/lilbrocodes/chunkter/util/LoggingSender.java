@@ -1,5 +1,6 @@
 package org.lilbrocodes.chunkter.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
@@ -7,11 +8,15 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class LoggingSender implements CommandSender {
     private final CommandSender wrappedSender;
     private String latestMessage = "";
+
+    private final List<String> runCommands = new ArrayList<>();
 
     public LoggingSender(CommandSender wrappedSender) {
         this.wrappedSender = wrappedSender;
@@ -29,6 +34,24 @@ public class LoggingSender implements CommandSender {
 
     public String getLatestMessage() {
         return latestMessage;
+    }
+
+    public List<String> doCommands(boolean clear) {
+        List<String> responses = new ArrayList<>();
+        for (String command : runCommands) {
+            Bukkit.dispatchCommand(this, command);
+            responses.add(latestMessage);
+        }
+        if (clear) clearCommands();
+        return responses;
+    }
+
+    public void addCommand(String command) {
+        runCommands.add(command);
+    }
+
+    public void clearCommands() {
+        runCommands.clear();
     }
 
     // ---------------- Required Overrides ---------------- //

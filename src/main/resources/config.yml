@@ -3,3 +3,31 @@ max-players: 1
 
 # If enabled, all chunky command except for quiet and progress will be blocked.
 enforce-generation: false
+
+world:
+  name: world
+  preset: border
+  # preset: border means it will use the world border as the borders of generation
+  #         (the equivalent of running /chunky worldborder before starting)
+  #
+  #  name: world_end
+  #  preset: manual
+  #  diameter: 12500
+  #  # That means generate in a 12500 x 12500 square around the center
+  #  # radius: 6250
+  #  # This means the same thing, just specified in the distance of the edge of generation from the center
+  #  # In case both are present, radius will be preferred over diameter
+  #  center-x: 0 # These two are optional, otherwise whatever chunky says to be the center will be used
+  #  center-y: 0 # ==""==
+
+
+# If enabled, the plugin will send a customizable message to the specified webhook.
+# So you don't have to look it up, if you want to ping someone the syntax is:
+#             <@USER_ID>
+# For roles it's the same, except:
+#             <@ROLE_ID>
+message-on-complete: false
+webhook-id: 0
+
+# %world_name% placeholder will be replaced with the world name that was finished if you add it
+message: "%world_name% finished generating!"
